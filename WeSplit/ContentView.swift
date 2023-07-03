@@ -13,7 +13,11 @@ struct ContentView: View {
     @State private var tipPercentage = 20
     @FocusState private var amountIsFocused: Bool
     let tipPercentages = [0,5,10,20,25]
-    
+    var totalPlusTip: Double{
+        let tipValue = checkAmount / 100 * Double(tipPercentage)
+        let total = checkAmount + tipValue
+        return total
+    }
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentage)
@@ -33,6 +37,7 @@ struct ContentView: View {
                         .focused($amountIsFocused)
                     Picker("Number of People", selection: $numberOfPeople){
                         ForEach(2..<100){
+                        
                             Text("\($0) people")
                         }
                     }
@@ -40,23 +45,29 @@ struct ContentView: View {
                 }
                 Section{
                     Picker("Tip Percentage", selection: $tipPercentage){
-                        ForEach(tipPercentages, id: \.self){
+                        ForEach(0..<101){
                             Text($0, format: .percent)
                             
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.navigationLink)
                 } header:{
                     Text("How much do you want to tip?")
                 }
                 Section{
                     Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                } header: {
+                    Text("Amount Per Person")
                 }
                 Section{
-                    Text(numberOfPeople, format: .number)
+                    Text(totalPlusTip, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                } header: {
+                    Text("Total Amount plus Tip")
                 }
+                
+
             }
-            .navigationTitle("Penis")
+            .navigationTitle("Check")
             .toolbar{
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
