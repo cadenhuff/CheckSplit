@@ -12,6 +12,12 @@ struct ContentView: View {
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
     @FocusState private var amountIsFocused: Bool
+    var useRedText: Bool {
+        if(tipPercentage == 0){
+            return true
+        }
+        return false
+    }
     let tipPercentages = [0,5,10,20,25]
     var totalPlusTip: Double{
         let tipValue = checkAmount / 100 * Double(tipPercentage)
@@ -29,6 +35,7 @@ struct ContentView: View {
     }
     
     var body: some View {
+
         NavigationView{
             Form{
                 Section{
@@ -61,9 +68,13 @@ struct ContentView: View {
                 }
                 Section{
                     Text(totalPlusTip, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .background(useRedText ? .red : .clear)
                 } header: {
                     Text("Total Amount plus Tip")
+                        
                 }
+                
+                
                 
 
             }
